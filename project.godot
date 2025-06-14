@@ -1,0 +1,24 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="gd-rust-plugin-template"
+run/main_scene="uid://und7dsbhoptm"
+config/features=PackedStringArray("4.4", "Forward Plus")
+config/icon="res://icon.svg"
+
+[autoload]
+
+example_rust_plugin="*res://addons/example_rust_plugin/rustutils.gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/example_rust_plugin/plugin.cfg")
