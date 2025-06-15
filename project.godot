@@ -22,3 +22,7 @@ example_rust_plugin="*res://addons/example_rust_plugin/rustutils.gd"
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/example_rust_plugin/plugin.cfg")
+
+[rendering]
+
+textures/vram_compression/import_etc2_astc=true

@@ -12,3 +12,4 @@ macos.debug =            "res://addons/example_rust_plugin/target/release/libexa
 macos.release =          "res://addons/example_rust_plugin/target/release/libexample_rust_plugin.dylib"
 macos.debug.arm64 =      "res://addons/example_rust_plugin/target/release/libexample_rust_plugin.dylib"
 macos.release.arm64 =    "res://addons/example_rust_plugin/target/release/libexample_rust_plugin.dylib"
+android.arm64 = "res://addons/example_rust_plugin/target/aarch64-linux-android/release/libexample_rust_plugin.so"
