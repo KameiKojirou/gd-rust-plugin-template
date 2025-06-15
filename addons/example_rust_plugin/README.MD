@@ -1,4 +1,5 @@
 # Rust + Godot 4.4.1 Android Plugin (gdextension) Guide for LINUX/UBUNTU HOST
+# Rust + Godot 4.4.1 Android Plugin (gdextension) Guide
 
 A concise recipe for cross-compiling a Rust `cdylib` for Android (arm64-v8a) and wiring it up in your `.gdextension`.
 
@@ -73,4 +74,82 @@ reloadable = true
 # Desktop targets (unchanged) …
 linux.debug.x86_64     = "res://addons/example_rust_plugin/\
 target/release/libexample_rust_plugin.so"
-linux.release.x86_64   = "res://addons/example
+linux.release.x86_64   = "res://addons/example_rust_plugin/\
+target/release/libexample_rust_plugin.so"
+windows.debug.x86_64   = "res://addons/example_rust_plugin/\
+target/release/example_rust_plugin.dll"
+windows.release.x86_64 = "res://addons/example_rust_plugin/\
+target/release/example_rust_plugin.dll"
+macos.debug            = "res://addons/example_rust_plugin/\
+target/release/libexample_rust_plugin.dylib"
+macos.release          = "res://addons/example_rust_plugin/\
+target/release/libexample_rust_plugin.dylib"
+macos.debug.arm64      = "res://addons/example_rust_plugin/\
+target/release/libexample_rust_plugin.dylib"
+macos.release.arm64    = "res://addons/example_rust_plugin/\
+target/release/libexample_rust_plugin.dylib"
+
+# Android arm64-v8a
+android.debug.arm64    = "res://addons/example_rust_plugin/\
+target/aarch64-linux-android/debug/libexample_rust_plugin.so"
+android.release.arm64  = "res://addons/example_rust_plugin/\
+target/aarch64-linux-android/release/libexample_rust_plugin.so"
+
+# OR if you don’t care about debug vs release:
+# android.arm64        = "res://addons/example_rust_plugin/\
+# target/aarch64-linux-android/release/libexample_rust_plugin.so"
+```
+
+---
+
+## 5. Troubleshooting
+
+- **“no ‘arm64’ library found”**  
+  → Ensure you have _both_ `android.debug.arm64` and/or `android.release.arm64` (or `android.arm64`) entries.  
+- **Stray newlines in paths**  
+  → Don’t break your quoted paths across lines with a stray space or backslash.  
+- **Verify `.so` exists**  
+  ```bash
+  ls target/aarch64-linux-android/{debug,release}/libexample_rust_plugin.so
+  ```
+
+---
+
+## 6. (Optional) Build All ABIs with `cargo-ndk`
+
+```bash
+cargo install cargo-ndk
+
+cargo ndk \
+  --platform $API_LEVEL \
+  --toolchain 23.2.8568313 \
+  --target aarch64-linux-android \
+  --release \
+  build
+```
+
+Repeat or script for other targets (`armeabi-v7a`, etc.) as needed.
+
+---
+
+## 7. Rust Entry-Point (in `src/lib.rs`)
+
+```rust
+use gdnative::prelude::*;
+
+#[no_mangle]
+pub extern "C" fn gdext_rust_init(init: InitHandle) {
+    init.add_class::<YourClass>();
+}
+```
+
+Ensure `Cargo.toml` has:
+
+```toml
+[lib]
+crate-type = ["cdylib"]
+```
+
+---
+
+That’s it! When you export your Android APK, Godot will package the `.so` into `lib/arm64-v8a/` and load your plugin at runtime.
